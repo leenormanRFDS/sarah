@@ -20,7 +20,7 @@ export function buildModelVector(responses: Record<number,string>): Vec {
     if(!p || !p.predictedOption.length || !w) continue;
     const share=1/p.predictedOption.length;
     for(const predicted of p.predictedOption){
-      const v=weights[Number(qid)]?.[pred] ?? zero;
+      const v=weights[Number(qid)]?.[predicted] ?? zero;
       priorSum=add(priorSum,scale(v,w*share));
       priorWeightCount += w*share;
     }
