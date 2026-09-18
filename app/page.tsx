@@ -1,2 +1,5 @@
-import Experience from '../components/Experience';
-export default function Page(){ return <Experience/>; }
+import ResearchPhase from '../components/ResearchPhase';
+
+export default function Page() {
+  return <ResearchPhase />;
+}

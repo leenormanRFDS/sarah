@@ -1,34 +1,296 @@
-export type Option = { id: string; label: string };
-export type Question = { id: number; question: string; options: Option[]; visiblePrediction: string; why?: boolean };
+export type QuestionKind = 'MEMORY_ANCHOR' | 'HYBRID' | 'BEHAVIOURAL_SIGNAL' | 'JOKE_EXCEPTION';
+export type PredictionState = 'KNOWN' | 'SPLIT' | 'UNKNOWN' | 'INVALID';
+export type Vec5 = [number, number, number, number, number]; // [S, N, A, SE, P]
+
+export interface QuestionOption {
+  id: string;
+  label: string;
+  vector?: Vec5;
+}
+
+export interface ResearcherPrediction {
+  state: PredictionState;
+  optionIds: string[];
+  display: string;
+}
+
+export interface Question {
+  id: number;
+  kind: QuestionKind;
+  question: string;
+  options: QuestionOption[];
+  researcherPrediction: ResearcherPrediction;
+  visibleReaction: string;
+  profileWeight: number;
+  narrativeReason?: string;
+}
 
 export const questions: Question[] = [
-  {id:1, question:'Morning person or night person?', options:[['A','Morning'],['B','Night'],['C','Depends']].map(([id,label])=>({id,label})), visiblePrediction:'Morning — she leaves early every day.'},
-  {id:2, question:'Coffee or tea?', options:[['A','Coffee'],['B','Tea'],['C','Both']].map(([id,label])=>({id,label})), visiblePrediction:'Coffee — probably with a complicated coffee order.'},
-  {id:3, question:'Sweet or savory?', options:[['A','Sweet'],['B','Savory'],['C','Both']].map(([id,label])=>({id,label})), visiblePrediction:'Both — depends on the situation.', why:true},
-  {id:4, question:'Favorite color?', options:[['A','Magenta'],['B','Blue'],['C','Green'],['D','Purple']].map(([id,label])=>({id,label})), visiblePrediction:'Magenta.'},
-  {id:5, question:'Favorite food?', options:[['A','Potatoes'],['B','Pasta'],['C','Pizza'],['D','Chocolate']].map(([id,label])=>({id,label})), visiblePrediction:'Anything potato — except salt & vinegar chips.', why:true},
-  {id:6, question:'Cat or dog?', options:[['A','Cat'],['B','Dog'],['C','Neither']].map(([id,label])=>({id,label})), visiblePrediction:'Dog.'},
-  {id:7, question:'Favorite movie genre?', options:[['A','Fantasy'],['B','Comedy'],['C','Thriller'],['D','Drama']].map(([id,label])=>({id,label})), visiblePrediction:'Fantasy — Lord of the Rings shit.'},
-  {id:8, question:'Shower or bath?', options:[['A','Shower'],['B','Bath'],['C','Either']].map(([id,label])=>({id,label})), visiblePrediction:'Shower — who has time for a bath?'},
-  {id:9, question:'Books or video?', options:[['A','Books'],['B','Video']].map(([id,label])=>({id,label})), visiblePrediction:'Books — no one watches video, do they?'},
-  {id:10, question:'Favorite board game?', options:[['A','Monopoly'],['B','Catan'],['C','Uno']].map(([id,label])=>({id,label})), visiblePrediction:'Monopoly — so she can charge Jack full rent for hotels.', why:true},
-  {id:11, question:'How many times has Sarah left Australia?', options:[['A','0'],['B','1'],['C','2'],['D','3+']].map(([id,label])=>({id,label})), visiblePrediction:'Twice.'},
-  {id:12, question:'Domestic travel recently?', options:[['A','Never'],['B','Once'],['C','Several'],['D','Constantly']].map(([id,label])=>({id,label})), visiblePrediction:'Once — Sydney.'},
-  {id:13, question:'Boats / ocean?', options:[['A','Love it'],['B','Like it'],['C','Neutral'],['D','Absolutely not']].map(([id,label])=>({id,label})), visiblePrediction:'Absolutely not — why would I?'},
-  {id:14, question:'Favorite animal?', options:[['A','Dog'],['B','Cat'],['C','Horse'],['D','Axolotl']].map(([id,label])=>({id,label})), visiblePrediction:'Something people can’t spell, like axolotl.'},
-  {id:15, question:'If Sarah could choose an unusual pet, what would she pick?', options:[['A','Snake'],['B','Miniature pig'],['C','Axolotl'],['D','Horse']].map(([id,label])=>({id,label})), visiblePrediction:'Miniature pig — strangely specific, but it feels right.'},
-  {id:16, question:'Would Sarah ever buy a horse?', options:[['A','Yes'],['B','No'],['C','Only if someone else handled the cost and work']].map(([id,label])=>({id,label})), visiblePrediction:'Not herself — she’d get Jack to buy it.'},
-  {id:17, question:'Reality TV?', options:[['A','Yes'],['B','No'],['C','Selectively']].map(([id,label])=>({id,label})), visiblePrediction:'Yes — Love on the Spectrum.'},
-  {id:18, question:'Kids?', options:[['A','Definitely'],['B','Probably'],['C','Yeah, I guess'],['D','No']].map(([id,label])=>({id,label})), visiblePrediction:'Yeah, I guess — there is definitely no people mover in this future.'},
-  {id:19, question:'If Sarah won $10m, what would she buy first?', options:[['A','House'],['B','Travel'],['C','Something ridiculous'],['D','Investment']].map(([id,label])=>({id,label})), visiblePrediction:'A diamond mine in Sierra Leone.', why:true},
-  {id:20, question:'Window seat or aisle?', options:[['A','Window'],['B','Aisle'],['C','Don’t care']].map(([id,label])=>({id,label})), visiblePrediction:'Window — although the researcher is not convinced she knows how seat selection works after one work trip.'},
-  {id:21, question:'Favorite musical artist?', options:[['A','Taylor Swift'],['B','Phoebe Bridgers'],['C','Dua Lipa'],['D','Adele']].map(([id,label])=>({id,label})), visiblePrediction:'Probably a sad female singer — researcher forgot her name, remembers only the sad music.'},
-  {id:22, question:'Disney or Pixar?', options:[['A','Disney'],['B','Pixar'],['C','Neither']].map(([id,label])=>({id,label})), visiblePrediction:'Pixar — I’m not 60, so obviously Pixar.'},
-  {id:23, question:'Bumble or Tinder?', options:[['A','Bumble'],['B','Tinder'],['C','Neither']].map(([id,label])=>({id,label})), visiblePrediction:'Bumble.'},
-  {id:24, question:'Why Bumble?', options:[['A','They should do the work'],['B','Better interface'],['C','Friends use it']].map(([id,label])=>({id,label})), visiblePrediction:'Because they should do the work.', why:true},
-  {id:25, question:'Sympathetic when Jack is sick?', options:[['A','Sympathy'],['B','Practical help'],['C','Toughen up'],['D','Depends']].map(([id,label])=>({id,label})), visiblePrediction:'Absolutely not — toughen up.'},
-  {id:26, question:'Ideal Friday night', options:[['A','Big night out'],['B','Dinner somewhere nice'],['C','Staying home'],['D','Something spontaneous']].map(([id,label])=>({id,label})), visiblePrediction:'Dinner somewhere nice.', why:true},
-  {id:27, question:'If you could choose your own name as a boy, which would you pick?', options:[['A','William'],['B','Max'],['C','Miles'],['D','James']].map(([id,label])=>({id,label})), visiblePrediction:'AXEL — despite the fact that it is not one of the options. The researcher refuses to retire the joke.'},
-  {id:28, question:'You can only keep one app on your phone. Which one stays?', options:[['A','Maps'],['B','Messages'],['C','Instagram'],['D','Notes']].map(([id,label])=>({id,label})), visiblePrediction:'No idea. Absolute wildcard.'},
-  {id:29, question:'Dishwasher loading', options:[['A','Everything has a designated place.'],['B','Cram it all in — it’ll fit.'],['C','Dishwasher? That’s Jack’s department.']].map(([id,label])=>({id,label})), visiblePrediction:'Dishwasher? That’s Jack’s department.'},
+  {
+    id: 1,
+    kind: 'MEMORY_ANCHOR',
+    question: 'Favorite color?',
+    options: [
+      { id: 'A', label: 'Magenta' },
+      { id: 'B', label: 'Blue' },
+      { id: 'C', label: 'Green' },
+      { id: 'D', label: 'Purple' }
+    ],
+    researcherPrediction: { state: 'KNOWN', optionIds: ['A'], display: 'Magenta.' },
+    visibleReaction: 'Confirmed.',
+    profileWeight: 0.0
+  },
+  {
+    id: 2,
+    kind: 'MEMORY_ANCHOR',
+    question: 'Favorite food?',
+    options: [
+      { id: 'A', label: 'Potatoes' },
+      { id: 'B', label: 'Pasta' },
+      { id: 'C', label: 'Pizza' },
+      { id: 'D', label: 'Chocolate' }
+    ],
+    researcherPrediction: { state: 'KNOWN', optionIds: ['A'], display: 'Anything potato — except salt & vinegar chips.' },
+    visibleReaction: 'Confirmed.',
+    profileWeight: 0.0
+  },
+  {
+    id: 3,
+    kind: 'MEMORY_ANCHOR',
+    question: 'Favorite movie genre?',
+    options: [
+      { id: 'A', label: 'Fantasy' },
+      { id: 'B', label: 'Comedy' },
+      { id: 'C', label: 'Thriller' },
+      { id: 'D', label: 'Drama' }
+    ],
+    researcherPrediction: { state: 'KNOWN', optionIds: ['A'], display: 'Fantasy — Lord of the Rings shit.' },
+    visibleReaction: 'Confirmed.',
+    profileWeight: 0.0
+  },
+  {
+    id: 4,
+    kind: 'HYBRID',
+    question: 'Morning person or night person?',
+    options: [
+      { id: 'A', label: 'Morning', vector: [1, -1, 0, -1, 1] },
+      { id: 'B', label: 'Night', vector: [-1, 1, 0, 1, -1] },
+      { id: 'C', label: 'Depends', vector: [0, 0, 0, 0, 0] }
+    ],
+    researcherPrediction: { state: 'KNOWN', optionIds: ['A'], display: 'Morning — she leaves early every day.' },
+    visibleReaction: 'Confirmed.',
+    profileWeight: 0.5
+  },
+  {
+    id: 5,
+    kind: 'MEMORY_ANCHOR',
+    question: 'Shower or bath?',
+    options: [
+      { id: 'A', label: 'Shower' },
+      { id: 'B', label: 'Bath' },
+      { id: 'C', label: 'Either' }
+    ],
+    researcherPrediction: { state: 'KNOWN', optionIds: ['A'], display: 'Shower — who has time for a bath?' },
+    visibleReaction: 'Confirmed.',
+    profileWeight: 0.0
+  },
+  {
+    id: 6,
+    kind: 'MEMORY_ANCHOR',
+    question: 'How many times has Sarah left Australia?',
+    options: [
+      { id: 'A', label: '0' },
+      { id: 'B', label: '1' },
+      { id: 'C', label: '2' },
+      { id: 'D', label: '3+' }
+    ],
+    researcherPrediction: { state: 'KNOWN', optionIds: ['C'], display: 'Twice.' },
+    visibleReaction: 'Confirmed.',
+    profileWeight: 0.0
+  },
+  {
+    id: 7,
+    kind: 'MEMORY_ANCHOR',
+    question: 'Cat or dog?',
+    options: [
+      { id: 'A', label: 'Cat' },
+      { id: 'B', label: 'Dog' },
+      { id: 'C', label: 'Neither' }
+    ],
+    researcherPrediction: { state: 'KNOWN', optionIds: ['B'], display: 'Dog.' },
+    visibleReaction: 'Confirmed.',
+    profileWeight: 0.0
+  },
+  {
+    id: 8,
+    kind: 'HYBRID',
+    question: 'Dishwasher loading?',
+    options: [
+      { id: 'A', label: 'Everything has a designated place.', vector: [2, -1, -1, -1, 2] },
+      { id: 'B', label: 'Cram it all in — it’ll fit.', vector: [-2, 1, 1, 1, -2] },
+      { id: 'C', label: 'Dishwasher? That’s Jack’s department.', vector: [0, 0, 2, 0, 1] }
+    ],
+    researcherPrediction: { state: 'KNOWN', optionIds: ['C'], display: 'Dishwasher? That’s Jack’s department.' },
+    visibleReaction: 'Confirmed.',
+    profileWeight: 0.75
+  },
+  {
+    id: 9,
+    kind: 'BEHAVIOURAL_SIGNAL',
+    question: 'Friends can\'t decide where to eat. What does Sarah do?',
+    options: [
+      { id: 'A', label: 'Picks a place and tells everyone', vector: [0, 0, 2, 1, 1] },
+      { id: 'B', label: 'Offers two options to vote on', vector: [1, 0, 1, 1, 2] },
+      { id: 'C', label: 'Waits for someone else to decide', vector: [0, 0, -2, -1, -1] }
+    ],
+    researcherPrediction: { state: 'KNOWN', optionIds: ['B'], display: 'Offers two options — democratic but decisive.' },
+    visibleReaction: 'Confirmed.',
+    profileWeight: 1.0
+  },
+  {
+    id: 10,
+    kind: 'MEMORY_ANCHOR',
+    question: 'Reality TV?',
+    options: [
+      { id: 'A', label: 'Yes' },
+      { id: 'B', label: 'No' },
+      { id: 'C', label: 'Selectively' }
+    ],
+    researcherPrediction: { state: 'KNOWN', optionIds: ['C'], display: 'Selectively — Love on the Spectrum.' },
+    visibleReaction: 'Confirmed.',
+    profileWeight: 0.0
+  },
+  {
+    id: 11,
+    kind: 'BEHAVIOURAL_SIGNAL',
+    question: 'Packing for a weekend trip?',
+    options: [
+      { id: 'A', label: 'Spreadsheet and packed two days prior', vector: [2, -2, 1, 0, 2] },
+      { id: 'B', label: 'Thrown together the night before', vector: [0, 1, 0, 0, 0] },
+      { id: 'C', label: 'Packed 10 minutes before leaving', vector: [-2, 2, -1, 0, -2] }
+    ],
+    researcherPrediction: { state: 'SPLIT', optionIds: ['A', 'B'], display: 'Somewhere between the spreadsheet and the night before.' },
+    visibleReaction: 'Confirmed.',
+    profileWeight: 1.0
+  },
+  {
+    id: 12,
+    kind: 'MEMORY_ANCHOR',
+    question: 'If Sarah could choose an unusual pet, what would she pick?',
+    options: [
+      { id: 'A', label: 'Snake' },
+      { id: 'B', label: 'Miniature pig' },
+      { id: 'C', label: 'Axolotl' },
+      { id: 'D', label: 'Horse' }
+    ],
+    researcherPrediction: { state: 'KNOWN', optionIds: ['C'], display: 'Something people can’t spell, like axolotl.' },
+    visibleReaction: 'Confirmed.',
+    profileWeight: 0.0
+  },
+  {
+    id: 13,
+    kind: 'HYBRID',
+    question: 'Would Sarah ever buy a horse?',
+    options: [
+      { id: 'A', label: 'Yes', vector: [-1, 1, 2, 1, -2] },
+      { id: 'B', label: 'No', vector: [2, -1, 0, -1, 2] },
+      { id: 'C', label: 'Only if someone else handled the cost and work', vector: [1, 0, 2, 0, 2] }
+    ],
+    researcherPrediction: { state: 'KNOWN', optionIds: ['C'], display: 'Not herself — she’d get Jack to buy it.' },
+    visibleReaction: 'Confirmed.',
+    profileWeight: 0.75
+  },
+  {
+    id: 14,
+    kind: 'BEHAVIOURAL_SIGNAL',
+    question: 'A new flat-pack bookshelf arrives. How is it getting built?',
+    options: [
+      { id: 'A', label: 'Reads the manual cover to cover', vector: [2, -1, 1, 0, 2] },
+      { id: 'B', label: 'Skims the manual and wings it', vector: [-1, 1, 1, 0, -1] },
+      { id: 'C', label: 'Leaves it for Jack', vector: [0, 0, -1, 0, 1] }
+    ],
+    researcherPrediction: { state: 'UNKNOWN', optionIds: [], display: 'NO RELIABLE MEMORY FOUND.' },
+    visibleReaction: 'NEW INFORMATION ACQUIRED.',
+    profileWeight: 1.0
+  },
+  {
+    id: 15,
+    kind: 'MEMORY_ANCHOR',
+    question: 'Favorite board game?',
+    options: [
+      { id: 'A', label: 'Monopoly' },
+      { id: 'B', label: 'Catan' },
+      { id: 'C', label: 'Uno' }
+    ],
+    researcherPrediction: { state: 'KNOWN', optionIds: ['A'], display: 'Monopoly — so she can charge Jack full rent.' },
+    visibleReaction: 'Confirmed.',
+    profileWeight: 0.0
+  },
+  {
+    id: 16,
+    kind: 'BEHAVIOURAL_SIGNAL',
+    question: 'The barista makes the coffee wrong. What happens?',
+    options: [
+      { id: 'A', label: 'Politely asks them to remake it', vector: [0, 0, 2, 0, 0] },
+      { id: 'B', label: 'Drinks it anyway to avoid a fuss', vector: [0, 0, -2, -1, 1] },
+      { id: 'C', label: 'Depends on how bad it is', vector: [0, 0, 0, 0, 0] }
+    ],
+    researcherPrediction: { state: 'KNOWN', optionIds: ['B'], display: 'Drinks it anyway to avoid a fuss.' },
+    visibleReaction: 'Confirmed.',
+    profileWeight: 1.0
+  },
+  {
+    id: 17,
+    kind: 'BEHAVIOURAL_SIGNAL',
+    question: 'Ideal Friday night?',
+    options: [
+      { id: 'A', label: 'Big night out', vector: [-1, 2, 0, 2, -1] },
+      { id: 'B', label: 'Dinner somewhere nice', vector: [1, 0, 0, 1, 1] },
+      { id: 'C', label: 'Staying home', vector: [1, -1, 0, -2, 2] }
+    ],
+    researcherPrediction: { state: 'KNOWN', optionIds: ['B'], display: 'Dinner somewhere nice.' },
+    visibleReaction: 'Confirmed.',
+    profileWeight: 1.0
+  },
+  {
+    id: 18,
+    kind: 'HYBRID',
+    question: 'If Sarah won $10m, what would she buy first?',
+    options: [
+      { id: 'A', label: 'House', vector: [1, -1, 0, 0, 2] },
+      { id: 'B', label: 'Travel', vector: [0, 2, 1, 1, -1] },
+      { id: 'C', label: 'Something ridiculous', vector: [-2, 2, 2, 0, -2] },
+      { id: 'D', label: 'Investment', vector: [2, -2, -1, 0, 2] }
+    ],
+    researcherPrediction: { state: 'KNOWN', optionIds: ['C'], display: 'A diamond mine in Sierra Leone.' },
+    visibleReaction: 'Confirmed.',
+    profileWeight: 0.5
+  },
+  {
+    id: 19,
+    kind: 'BEHAVIOURAL_SIGNAL',
+    question: 'What does Sarah\'s personal email inbox look like?',
+    options: [
+      { id: 'A', label: 'Inbox Zero', vector: [2, 0, 1, 0, 1] },
+      { id: 'B', label: 'A few unread but managed', vector: [1, 0, 0, 0, 2] },
+      { id: 'C', label: 'Thousands of unread promotional emails', vector: [-2, 0, -1, 0, -1] }
+    ],
+    researcherPrediction: { state: 'KNOWN', optionIds: ['B'], display: 'A few unread but managed.' },
+    visibleReaction: 'Confirmed.',
+    profileWeight: 1.0
+  },
+  {
+    id: 20,
+    kind: 'JOKE_EXCEPTION',
+    question: 'If you could choose your own name as a boy, which would you pick?',
+    options: [
+      { id: 'A', label: 'William' },
+      { id: 'B', label: 'Max' },
+      { id: 'C', label: 'Miles' },
+      { id: 'D', label: 'James' }
+    ],
+    researcherPrediction: { state: 'INVALID', optionIds: [], display: 'INVALID CLAIM — OPTION DOES NOT EXIST.' },
+    visibleReaction: 'RESEARCHER HAS ELECTED TO RETAIN CLAIM.',
+    profileWeight: 0.0
+  }
 ];

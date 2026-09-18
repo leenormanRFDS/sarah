@@ -6,3 +6,68 @@
 .break-mono{font:700 12px 'IBM Plex Mono',monospace;letter-spacing:.14em;color:#71767d;max-width:1200px;margin:0 auto;padding:24px 7vw}.startup-break{min-height:100vh;background:#050505;color:#fff}.startup-break .hard-cut{max-width:1280px;margin:20vh auto 0;padding:0 7vw 10vh}.forge-eyebrow{font:700 11px 'IBM Plex Mono',monospace;color:#70757c;letter-spacing:.16em}.forge-logo{font-size:clamp(100px,20vw,250px);font-weight:800;letter-spacing:-.09em;line-height:.73;margin-top:35px}.forge-logo span{font-size:.15em;vertical-align:top}.forge-acronym{font-size:clamp(21px,3vw,34px);color:#bcc1c8;margin-top:30px}.forge-tagline{font-size:clamp(55px,10vw,135px);line-height:.82;letter-spacing:-.07em;font-weight:800;max-width:1000px;margin-top:70px;background:linear-gradient(90deg,#fff,#7ff8d3,#8d73ff);background-clip:text;-webkit-background-clip:text;color:transparent}.startup-break .forge-button{margin-top:45px}
 .startup-inner:after{content:'';position:absolute;width:55vw;height:55vw;right:-18vw;top:8vh;border-radius:50%;background:conic-gradient(from 180deg,rgba(126,255,220,.18),rgba(132,105,255,.02),rgba(126,255,220,.08));filter:blur(40px);animation:orb 12s ease-in-out infinite alternate;pointer-events:none}@keyframes orb{from{transform:translate3d(0,0,0) scale(1)}to{transform:translate3d(-7vw,5vh,0) scale(1.16)}}
 .startup-chips span{transition:border-color .2s,transform .2s}.startup-chips span:hover{border-color:#646b74;transform:translateY(-2px)}
+
+/* New Quiz Reveal CSS */
+.quiz-top {
+  display: flex;
+  flex-direction: column;
+}
+.progress-bar-container {
+  overflow: hidden;
+}
+.answers button.dimmed {
+  opacity: 0.3;
+  transform: none;
+}
+.prediction-reveal {
+  margin-top: 45px;
+  border-top: 1px solid var(--ink);
+  padding-top: 35px;
+}
+.reveal-row {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.reveal-row span {
+  font: 700 11px 'IBM Plex Mono', monospace;
+  color: #72767a;
+  letter-spacing: 0.05em;
+}
+.reveal-row b {
+  font-size: 26px;
+  line-height: 1.1;
+  letter-spacing: -0.04em;
+}
+.result-box {
+  margin-top: 35px;
+  padding: 22px;
+  border: 1px solid var(--ink);
+  background: var(--paper);
+}
+.result-box.match {
+  background: #e8fff7;
+}
+.result-box.mismatch {
+  background: #fff0eb;
+}
+.result-box.uncertain {
+  background: #f1f0ee;
+}
+.result-status {
+  font: 800 16px 'IBM Plex Mono', monospace;
+  margin-bottom: 6px;
+}
+.result-reaction {
+  font-size: 17px;
+  line-height: 1.4;
+  color: #333;
+}
+.fallback-next {
+  margin-top: 30px;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
